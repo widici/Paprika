@@ -7,6 +7,7 @@ import os
 import sys
 from replit import db
 from keep_alive import keep_alive
+import psutil
 chars = ["[", "]", "(", ")"]
 reddit_id = os.environ['reddit_id']
 reddit_token = os.environ['reddit_token']
@@ -53,6 +54,13 @@ async def posts(ctx):
 	posts = db["posts"]
 	postembed = discord.Embed(title = f"{posts}", color = discord.Color.red())
 	await ctx.channel.send(embed = postembed)
+
+@client.command()
+async def stats(ctx):
+	statembed = discord.Embed(color = discord.Color.red())
+	statembed.add_field(name = "CPU Usage", value = f"{psutil.cpu_percent()}%", inline = False)
+	statembed.add_field(name = "RAM Usage", value = f"{psutil.virtual_memory().percent}%", inline = False)
+	await ctx.channel.send(embed = statembed)
 
 @client.command()
 async def status(ctx, *args):
