@@ -29,25 +29,6 @@ async def on_ready():
 		starttime = time.time()
 		print("Hello world! :D")
 		await client.change_presence(status=discord.Status.idle, activity=discord.Game(db["status"]))
-		
-@client.command()
-async def runtime(ctx):
-	timepassed = (round(time.time() - starttime))
-	seconds = timepassed % (24 * 3600)
-	hour = seconds // 3600
-	seconds %= 3600
-	minutes = seconds // 60
-	seconds %= 60
-      
-	totaltime = ("%d:%02d:%02d" % (hour, minutes, seconds))
-	
-	timeembed = discord.Embed(title = totaltime, color = discord.Color.red())
-	await ctx.channel.send(embed = timeembed)
-
-@client.command()
-async def ping(ctx):
-	pingembed = discord.Embed(title = f"{round(client.latency * 1000)} ms", color = discord.Color.red())
-	await ctx.channel.send(embed = pingembed)
 
 @client.command()
 async def posts(ctx):
@@ -57,10 +38,21 @@ async def posts(ctx):
 
 @client.command()
 async def stats(ctx):
+	timepassed = (round(time.time() - starttime))
+	seconds = timepassed % (24 * 3600)
+	hour = seconds // 3600
+	seconds %= 3600
+	minutes = seconds // 60
+	seconds %= 60
+	totaltime = ("%d:%02d:%02d" % (hour, minutes, seconds))
+	
 	ramusage = psutil.virtual_memory().percent / 100
+	
 	statembed = discord.Embed(color = discord.Color.red())
 	statembed.add_field(name = "CPU Usage", value = f"{psutil.cpu_percent()}%", inline = False)
 	statembed.add_field(name = "RAM Usage", value = f"{psutil.virtual_memory().percent}% ({round(ramusage, 2) * 1024} MB)", inline = False)
+	statembed.add_field(name = "Runtime", value = totaltime, inline = False)
+	statembed.add_field(name = "Ping", value = f"{round(client.latency * 1000)} ms", inline = False)
 	await ctx.channel.send(embed = statembed)
 
 @client.command()
