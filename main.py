@@ -57,9 +57,10 @@ async def posts(ctx):
 
 @client.command()
 async def stats(ctx):
+	ramusage = psutil.virtual_memory().percent / 100
 	statembed = discord.Embed(color = discord.Color.red())
 	statembed.add_field(name = "CPU Usage", value = f"{psutil.cpu_percent()}%", inline = False)
-	statembed.add_field(name = "RAM Usage", value = f"{psutil.virtual_memory().percent}%", inline = False)
+	statembed.add_field(name = "RAM Usage", value = f"{psutil.virtual_memory().percent}% ({round(ramusage, 2) * 1024} MB)", inline = False)
 	await ctx.channel.send(embed = statembed)
 
 @client.command()
