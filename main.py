@@ -30,13 +30,13 @@ async def on_ready():
 		print("Hello world! :D")
 		await client.change_presence(status=discord.Status.idle, activity=discord.Game(db["status"]))
 
-@client.command()
+@client.command(name="posts", aliases=["submissions"])
 async def posts(ctx):
 	posts = db["posts"]
 	postembed = discord.Embed(title = f"{posts}", color = discord.Color.red())
 	await ctx.channel.send(embed = postembed)
 
-@client.command()
+@client.command(name="stats", aliases=["statistics", "cpu", "ram", "ping", "runtime", "uptime"])
 async def stats(ctx):
 	timepassed = (round(time.time() - starttime))
 	seconds = timepassed % (24 * 3600)
