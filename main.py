@@ -45,12 +45,17 @@ async def stats(ctx):
 	minutes = seconds // 60
 	seconds %= 60
 	totaltime = ("%d:%02d:%02d" % (hour, minutes, seconds))
-	
-	ramusage = psutil.virtual_memory().percent / 100
+
+	ramtext = f" (□□□□□□□□□□), {psutil.virtual_memory().percent}% ({round(psutil.virtual_memory().percent / 100, 2) * 1024} MB)"
+	ramtext = ramtext.replace("□", "■", round(psutil.virtual_memory().percent / 10))
+
+	cpu_percent = psutil.cpu_percent()
+	cputext = f" (□□□□□□□□□□), {cpu_percent}%"
+	cputext = cputext.replace("□", "■", round(cpu_percent / 10))
 	
 	statembed = discord.Embed(color = discord.Color.red())
-	statembed.add_field(name = "CPU Usage", value = f"{psutil.cpu_percent()}%", inline = False)
-	statembed.add_field(name = "RAM Usage", value = f"{psutil.virtual_memory().percent}% ({round(ramusage, 2) * 1024} MB)", inline = False)
+	statembed.add_field(name = "CPU Usage", value = cputext, inline = False)
+	statembed.add_field(name = "RAM Usage", value = ramtext, inline = False)
 	statembed.add_field(name = "Runtime", value = totaltime, inline = False)
 	statembed.add_field(name = "Ping", value = f"{round(client.latency * 1000)} ms", inline = False)
 	await ctx.channel.send(embed = statembed)
