@@ -46,6 +46,12 @@ class Help(commands.MinimalHelpCommand):
 
 				channel = self.get_destination()
 				await channel.send(embed=embed)
+			
+		async def send_error_message(self, error):
+				embed = discord.Embed(title="Error", description=error, color=discord.Color.red())
+			
+				channel = self.get_destination()
+				await channel.send(embed=embed)
 
 client.help_command = Help()
 
