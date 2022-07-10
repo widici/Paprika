@@ -30,6 +30,25 @@ async def on_ready():
 		print("Hello world! :D")
 		await client.change_presence(status=discord.Status.idle, activity=discord.Game(db["status"]))
 
+
+class Help(commands.MinimalHelpCommand):
+		async def send_pages(self):
+				destination = self.get_destination()
+				for page in self.paginator.pages:
+						emby = discord.Embed(description=page)
+						await destination.send(embed=emby)
+		async def send_command_help(self, command):
+				embed = discord.Embed(title=self.get_command_signature(command))
+				embed.add_field(name="Help", value=command.help)
+				alias = command.aliases
+				if alias:
+					embed.add_field(name="Aliases", value=", ".join(alias), inline=False)
+
+				channel = self.get_destination()
+				await channel.send(embed=embed)
+
+client.help_command = Help()
+
 @client.command(name="posts", aliases=["submissions"])
 async def posts(ctx):
 	posts = db["posts"]
