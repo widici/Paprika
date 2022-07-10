@@ -35,10 +35,10 @@ class Help(commands.MinimalHelpCommand):
 		async def send_pages(self):
 				destination = self.get_destination()
 				for page in self.paginator.pages:
-						emby = discord.Embed(description=page)
+						emby = discord.Embed(description=page, color = discord.Color.red())
 						await destination.send(embed=emby)
 		async def send_command_help(self, command):
-				embed = discord.Embed(title=self.get_command_signature(command))
+				embed = discord.Embed(title=self.get_command_signature(command), color = discord.Color.red())
 				embed.add_field(name="Help", value=command.help)
 				alias = command.aliases
 				if alias:
@@ -49,13 +49,13 @@ class Help(commands.MinimalHelpCommand):
 
 client.help_command = Help()
 
-@client.command(name="posts", aliases=["submissions"])
+@client.command(name="posts", help="Shows number of posts client has recorded", aliases=["submissions"])
 async def posts(ctx):
 	posts = db["posts"]
 	postembed = discord.Embed(title = f"{posts}", color = discord.Color.red())
 	await ctx.channel.send(embed = postembed)
 
-@client.command(name="stats", aliases=["statistics", "cpu", "ram", "ping", "runtime", "uptime"])
+@client.command(name="stats", help="Shows statistics about client's performance", aliases=["statistics", "cpu", "ram", "ping", "runtime", "uptime"])
 async def stats(ctx):
 	timepassed = (round(time.time() - starttime))
 	seconds = timepassed % (24 * 3600)
@@ -79,7 +79,7 @@ async def stats(ctx):
 	statembed.add_field(name = "Ping", value = f"{round(client.latency * 1000)} ms", inline = False)
 	await ctx.channel.send(embed = statembed)
 
-@client.command()
+@client.command(help="Changes client status")
 async def status(ctx, *args):
 	if ctx.message.author.id == 532561774013054976:
 		text = (' '.join(ctx.message.content.split()[1:]))
@@ -90,7 +90,7 @@ async def status(ctx, *args):
 	else:
 		await ctx.send(embed = permissionembed)
 
-@client.command()
+@client.command(help="Shuts down client")
 async def shutdown(ctx):
 	if ctx.message.author.id == 532561774013054976:
 		shutdownembed = discord.Embed(title = "Client shutting down...", color = discord.Color.red())
