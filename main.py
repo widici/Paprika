@@ -115,12 +115,12 @@ async def search():
 
 						has_all = all([char in submission.title for char in chars])
 
-						if has_all:
+						if has_all and not submission.over_18:
 
 								db["posts"] = db["posts"] + 1
 
 								txt = submission.title
-
+	
 								split = txt.split(") ")
 
 								txt = txt.replace("[", "txt")
@@ -141,9 +141,10 @@ async def search():
 
 								embed.add_field(name = "Game info:", value = f"Store: {store}, Type: {type}", inline = False)
 								
-								embed.add_field(name = "Post info:", value = f"Credit: u/{submission.author}, Upvotes: {submission.score}", inline = False)
+								embed.add_field(name = "Post info:", value = f"Author: u/{submission.author}, Upvotes: {submission.score}", inline = False)
 				
 								await channel.send(embed = embed)
+								print(f"Detcted a game {game}")
 
 search.start()
 keep_alive()
